@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  flask-app:
+    build:
+      context: ./server
+    ports:
+      - '5000:5000'
+    depends_on:
+      - postgres-db
+    environment:
+      - DATABASE_URI=postgresql://admin:admin@postgres-db:5432/pubplus # Adjust as needed
+
+  react-app:
+    build:
+      context: ./client
+    ports:
+      - '3000:3000'
+    depends_on:
+      - flask-app
+
+  postgres-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: pubplus
